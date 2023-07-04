@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/landmarkDetection"
+        android:icon="@drawable/twotone_visibility_24"
+        android:title="Landmark"  />
+    <item
+        android:id="@+id/aboutInfo"
+        android:icon="@drawable/twotone_info_24"
+        android:title="About" />
+</menu>
