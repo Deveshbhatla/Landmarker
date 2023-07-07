@@ -10,17 +10,17 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        loadFragment(LandmarkDetection())
+        loadFragment(LandmarkDetectionFragment())
         bottomNav = findViewById(R.id.bottomNav)
 
         bottomNav.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.landmarkDetection -> {
-                    loadFragment(LandmarkDetection())
+                    loadFragment(LandmarkDetectionFragment())
                     true
                 }
                 R.id.aboutInfo -> {
-                    loadFragment(About())
+                    loadFragment(AboutFragment())
                     true
                 }
 

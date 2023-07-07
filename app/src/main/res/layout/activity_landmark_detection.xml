@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LandmarkDetectionActivity"
+    >
+
+
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_height="match_parent"
+        >
+        <TextView
+            android:id="@+id/continent_name"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:text="Continent name"
+            >
+
+        </TextView>
+
+        <ImageView
+            android:id="@+id/image_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/continent_name"
+            />
+        <Button
+            android:id="@+id/button_select_image"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:elevation="10dp"
+            android:textColor="#FFFFFF"
+            android:background="#E6B608"
+            android:padding="5dp"
+            android:layout_margin="3dp"
+            android:layout_height="wrap_content"
+            android:text="Select From Your Device"/>
+    </RelativeLayout>
+
+</LinearLayout>
