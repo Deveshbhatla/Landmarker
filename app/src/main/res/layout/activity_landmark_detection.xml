@@ -1,49 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".LandmarkDetectionActivity"
-    >
+    android:orientation="vertical">
 
-
-    <RelativeLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="30dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_height="match_parent"
-        >
-        <TextView
-            android:id="@+id/continent_name"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:text="Continent name"
-            >
-
-        </TextView>
-
-        <ImageView
-            android:id="@+id/image_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/continent_name"
-            />
-        <Button
-            android:id="@+id/button_select_image"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:layout_width="wrap_content"
-            android:elevation="10dp"
-            android:textColor="#FFFFFF"
-            android:background="#E6B608"
-            android:padding="5dp"
-            android:layout_margin="3dp"
             android:layout_height="wrap_content"
-            android:text="Select From Your Device"/>
-    </RelativeLayout>
+            android:orientation="vertical"
+            android:layout_above="@id/bottom_layout"
+            android:layout_alignParentTop="true">
+            <TextView
+                android:id="@+id/continent_name"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:text="Continent name">
+            </TextView>
 
-</LinearLayout>
+            <ImageView
+                android:id="@+id/image_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/continent_name"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/bottom_layout"
+            android:padding="5dp"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <Button
+                    android:id="@+id/button_select_image_gallery"
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:elevation="10dp"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="#E6B608"
+                    android:padding="5dp"
+                    android:layout_margin="3dp"
+                    android:layout_height="wrap_content"
+                    android:text="Select From Your Device"/>
+
+                <Button
+                    android:id="@+id/button_select_image_camera"
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:elevation="10dp"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="#E6B608"
+
+                    android:padding="5dp"
+                    android:layout_margin="3dp"
+                    android:layout_height="wrap_content"
+                    android:text="Select From Your Camera"/>
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
+</RelativeLayout>
