@@ -1,32 +1,30 @@
 package com.tensorflow.landmarker
 
-import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
-import android.os.Build
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.os.*
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
-import androidx.lifecycle.Lifecycle
 import com.google.common.net.MediaType
 import com.google.mediapipe.framework.image.BitmapImageBuilder
+import com.google.mediapipe.tasks.components.containers.Category
 import com.google.mediapipe.tasks.core.BaseOptions
 import com.google.mediapipe.tasks.core.Delegate
 import com.google.mediapipe.tasks.vision.core.RunningMode
 import com.google.mediapipe.tasks.vision.imageclassifier.ImageClassifier
+import com.google.mediapipe.tasks.vision.imageclassifier.ImageClassifierResult
 import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.lang.System.out
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.Executors
@@ -39,6 +37,10 @@ val REQUEST_CODE = 100
 private lateinit var backgroundExecutor: ScheduledExecutorService
 var modelName :String = "NULL"
 private var tmpUri: Uri? = null
+private var categories: MutableList<Category?> = mutableListOf()
+private var adapterSize: Int = 0
+private var bitmapDrawable: BitmapDrawable? = null;
+private var bitmap1: Bitmap? = null
 
 class LandmarkDetectionActivity : AppCompatActivity() {
     var continentId=0 // or other values
@@ -90,11 +92,10 @@ class LandmarkDetectionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_landmark_detection)
         imageViewResult = findViewById<ImageView>(R.id.image_view)
-
-        val continentName: TextView = findViewById<TextView>(R.id.continent_name)
         val cameraSelectButton = findViewById<Button>(R.id.button_select_image_camera)
-
         val gallerySelectbutton = findViewById<Button>(R.id.button_select_image_gallery);
+
+
         gallerySelectbutton.setOnClickListener{
             getContent.launch(arrayOf("image/*"))
             updateDisplayView(MediaType.UNKNOWN)
@@ -120,38 +121,43 @@ class LandmarkDetectionActivity : AppCompatActivity() {
         {
             if (b.getInt("NorthAmerica")==1)
             {
-                continentName.setText("North America Continent ")
+                //continentName.setText("North America Continent ")
                 modelName = "north_america_landmark.tflite"
+                supportActionBar!!.title = "North  America Continent";
+
                 //landmarkDetectorService(modelName)
             }
             else if(b.getInt("SouthAmerica")==2)
             {
-                continentName.setText("South America Continent ")
                 modelName = "south_america_landmark.tflite"
+                supportActionBar!!.title ="South America Continent"
                 //landmarkDetectorService(modelName)
             }
             else if(b.getInt("Asia")==3)
             {
-                continentName.setText("Asia Continent ")
                 modelName = "asia_landmark.tflite"
+                supportActionBar!!.title ="Asia Continent"
                 //landmarkDetectorService(modelName)
             }
             else if(b.getInt("Europe")==4)
             {
-                continentName.setText("Europe Continent")
                 modelName = "europe_landmark.tflite"
+                supportActionBar!!.title ="Europe Continent"
+
                 //landmarkDetectorService(modelName)
             }
             else if(b.getInt("Africa")==5)
             {
-                continentName.setText("Africa Continent")
                 modelName = "africa_landmark.tflite"
+                supportActionBar!!.title ="Africa Continent"
+
                 //landmarkDetectorService(modelName)
             }
             else if(b.getInt("Antarctica")==6)
             {
-                continentName.setText("Antartica Continent")
                 modelName = "antarctica_landmark.tflite"
+                supportActionBar!!.title ="Antartica Continent"
+
                 //landmarkDetectorService(modelName)
             }
 
@@ -198,7 +204,7 @@ class LandmarkDetectionActivity : AppCompatActivity() {
                 val optionsBuilder =
                     ImageClassifier.ImageClassifierOptions.builder()
 
-                        .setScoreThreshold(0.7F)
+                        .setScoreThreshold(0.8F)
                         .setRunningMode(RunningMode.IMAGE)
                         .setMaxResults(3)
                         .setBaseOptions(
@@ -218,6 +224,7 @@ class LandmarkDetectionActivity : AppCompatActivity() {
             Handler(Looper.getMainLooper()).postDelayed({
                 val classifierResult = imageClassifier!!.classify(mpImage)
                 Log.d("ClassifierResult",classifierResult.toString())
+                updateResults(classifierResult)
 
             }, 5000)
         }
@@ -264,7 +271,75 @@ class LandmarkDetectionActivity : AppCompatActivity() {
         imageViewResult?.visibility ?:
             if (mediaType == MediaType.UNKNOWN) View.VISIBLE else View.GONE
     }
+    private fun updateResults(imageClassifierResult: ImageClassifierResult? = null) {
+        val landmarkDescription=findViewById<EditText>(R.id.Landmark_Description)
+        val shareLandmark=findViewById<Button>(R.id.button_share_landmark)
 
+        if (imageClassifierResult != null) {
+            val sortedCategories = imageClassifierResult.classificationResult()
+                .classifications()[0].categories().sortedBy { it.index() }
+
+            Log.d("SORTED CATEGORIES: ", sortedCategories.toString())
+            if(sortedCategories.isNotEmpty())
+            {
+                val detectedLandmark=imageClassifierResult.classificationResult().classifications()[0].categories()[0].displayName()
+                landmarkDescription.setText(detectedLandmark)
+                shareLandmark.isEnabled=true
+                Log.d("CONTINENT WITH HIGHEST CONFIDENCE: ", detectedLandmark)
+            }
+            else
+            {
+                shareLandmark.isEnabled=true
+                landmarkDescription.setText(resources.getString(R.string.no_landmark_detected))
+            }
+
+            shareLandmark.setOnClickListener()
+            {
+
+
+
+                //val bitmapOfDetectedImage = imageViewResult?.getDrawable()
+                val bitmapOfDetectedImage = (imageViewResult!!.getDrawable() as BitmapDrawable).getBitmap()
+//                val bitmap: Bitmap = BitmapFactory.decodeResource(
+//                    this.resources,
+//                    R.drawable.africa_landmark_detection_logo
+//                ).copy(Bitmap.Config.ARGB_8888, true)
+
+                try {
+                    val cachePath: File = File(this.cacheDir, "images")
+                    cachePath.mkdirs() // make the directory
+                    val stream = FileOutputStream(
+                        File(cachePath,landmarkDescription.text.toString()+".png")
+                    ) // overwrites this image every time
+                    bitmapOfDetectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream   )
+                    stream.close()
+
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+
+                val imagePath: File = File(this.cacheDir, "images")
+                val newFile = File(imagePath, landmarkDescription.text.toString()+".png")
+                val contentUri = FileProvider.getUriForFile(this, "com.tensorflow.landmarker.provider", newFile)
+
+                val shareIntent = Intent()
+                shareIntent.action = Intent.ACTION_SEND
+                shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                shareIntent.setDataAndType(contentUri, contentResolver.getType(contentUri))
+                //shareIntent.putExtra(Intent.EXTRA_TEXT, landmarkDescription.text)
+                shareIntent.putExtra(Intent.EXTRA_TITLE,landmarkDescription.text)
+                shareIntent.putExtra(Intent.EXTRA_TITLE,landmarkDescription.text)
+
+
+                shareIntent.type = "image/*"
+                shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri)
+                startActivity(Intent.createChooser(shareIntent, "Share text..."))
+
+            }
+
+
+        }
+    }
     override fun onBackPressed() {
         val intent = Intent (this, MainActivity::class.java)
         startActivity(intent)

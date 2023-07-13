@@ -11,21 +11,34 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_above="@id/bottom_layout"
+            android:layout_above="@id/description_layout"
             android:layout_alignParentTop="true">
-            <TextView
-                android:id="@+id/continent_name"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:text="Continent name">
-            </TextView>
+
 
             <ImageView
                 android:id="@+id/image_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/continent_name"
+
                 />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/description_layout"
+            android:layout_above="@id/bottom_layout">
+
+            <EditText
+                android:id="@+id/Landmark_Description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/please_select_an_image"
+                android:backgroundTint="@color/teal_200"
+                android:inputType="text">
+            </EditText>
+
         </RelativeLayout>
 
         <RelativeLayout
@@ -36,6 +49,7 @@
             android:id="@+id/bottom_layout"
             android:padding="5dp"
             >
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -45,27 +59,40 @@
                 <Button
                     android:id="@+id/button_select_image_gallery"
                     android:layout_width="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
                     android:elevation="10dp"
                     android:textColor="#FFFFFF"
                     android:backgroundTint="#E6B608"
                     android:padding="5dp"
                     android:layout_margin="3dp"
-                    android:layout_height="wrap_content"
                     android:text="Select From Your Device"/>
 
                 <Button
                     android:id="@+id/button_select_image_camera"
                     android:layout_width="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
                     android:elevation="10dp"
                     android:textColor="#FFFFFF"
                     android:backgroundTint="#E6B608"
-
                     android:padding="5dp"
                     android:layout_margin="3dp"
-                    android:layout_height="wrap_content"
                     android:text="Select From Your Camera"/>
+
+                <Button
+                    android:id="@+id/button_share_landmark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.8"
+                    android:elevation="10dp"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="#E6B608"
+                    android:enabled="false"
+                    android:padding="5dp"
+                    android:layout_margin="3dp"
+                    android:text="share"
+                     />
             </LinearLayout>
 
         </RelativeLayout>

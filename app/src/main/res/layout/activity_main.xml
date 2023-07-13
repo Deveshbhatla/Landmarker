@@ -27,6 +27,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/navigation_menu"
+        android:background="#ffffff"
         app:itemIconTint="@color/navbar_color"
         app:itemTextColor="@color/navbar_color"
         android:scrollIndicators="left"/>
