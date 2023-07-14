@@ -3,6 +3,7 @@
     <style name="Theme.Landmarker" parent="Theme.MaterialComponents.DayNight.DarkActionBar.Bridge">
         <item name="android:textColorPrimary">@color/teal_200</item>
         <item name="android:backgroundTint">@color/white</item>
+        <item name="android:state_pressed">@color/black</item>
 
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/white</item>

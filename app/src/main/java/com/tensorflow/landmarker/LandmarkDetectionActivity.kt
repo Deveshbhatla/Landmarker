@@ -1,21 +1,27 @@
 package com.tensorflow.landmarker
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.graphics.drawable.BitmapDrawable
+import android.icu.util.LocaleData
 import android.net.Uri
-import android.os.*
+import android.os.Build
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
+import android.view.View.inflate
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.FileProvider
 import com.google.common.net.MediaType
 import com.google.mediapipe.framework.image.BitmapImageBuilder
-import com.google.mediapipe.tasks.components.containers.Category
 import com.google.mediapipe.tasks.core.BaseOptions
 import com.google.mediapipe.tasks.core.Delegate
 import com.google.mediapipe.tasks.vision.core.RunningMode
@@ -24,26 +30,23 @@ import com.google.mediapipe.tasks.vision.imageclassifier.ImageClassifierResult
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import java.lang.System.out
+import java.sql.Time
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 
 
 private var imageClassifier: ImageClassifier? = null
-const val OTHER_ERROR = 0
-val REQUEST_CODE = 100
 private lateinit var backgroundExecutor: ScheduledExecutorService
 var modelName :String = "NULL"
 private var tmpUri: Uri? = null
-private var categories: MutableList<Category?> = mutableListOf()
-private var adapterSize: Int = 0
-private var bitmapDrawable: BitmapDrawable? = null;
-private var bitmap1: Bitmap? = null
 
 class LandmarkDetectionActivity : AppCompatActivity() {
-    var continentId=0 // or other values
     var imageViewResult: ImageView? =null
 
     enum class MediaType {
@@ -94,6 +97,9 @@ class LandmarkDetectionActivity : AppCompatActivity() {
         imageViewResult = findViewById<ImageView>(R.id.image_view)
         val cameraSelectButton = findViewById<Button>(R.id.button_select_image_camera)
         val gallerySelectbutton = findViewById<Button>(R.id.button_select_image_gallery);
+
+
+
 
 
         gallerySelectbutton.setOnClickListener{
@@ -204,7 +210,7 @@ class LandmarkDetectionActivity : AppCompatActivity() {
                 val optionsBuilder =
                     ImageClassifier.ImageClassifierOptions.builder()
 
-                        .setScoreThreshold(0.8F)
+                        .setScoreThreshold(0.5F)
                         .setRunningMode(RunningMode.IMAGE)
                         .setMaxResults(3)
                         .setBaseOptions(
@@ -221,47 +227,33 @@ class LandmarkDetectionActivity : AppCompatActivity() {
             }
             val mpImage = BitmapImageBuilder(bitmap).build()
 
+            val dialogBuilder = AlertDialog.Builder(this)
+            dialogBuilder.setView(R.layout.progress_bar_layout)
+            val dialog = dialogBuilder.create()
+
+            dialog.show()
+            dialog.setCancelable(false)
+
             Handler(Looper.getMainLooper()).postDelayed({
                 val classifierResult = imageClassifier!!.classify(mpImage)
                 Log.d("ClassifierResult",classifierResult.toString())
                 updateResults(classifierResult)
 
+                    dialog.dismiss();
+
+
+
             }, 5000)
         }
-//        gallerySelectbutton.setOnClickListener()
-//        {
-//            //opengallery()
-//            Log.d("Gallery selected Button Clicked: ", "Selected")
-//
-//        }
+
     }
-
-//    fun opengallery() {
-//        val intent = Intent(Intent.ACTION_PICK)
-//        intent.type = "image/*"
-//        startActivityForResult(intent, REQUEST_CODE)
-//    }
-
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE){
-//            imageViewResult?.setImageURI(data?.data) // handle chosen image
-//        }
-//        val newUri = Uri.parse(data?.data.toString())
-//        val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, newUri)
-//        val mpImage = BitmapImageBuilder(bitmap).build()
-//
-//        val classifierResult = imageClassifier!!.classify(mpImage)
-//        Log.d("ClassifierResult",classifierResult.toString())
-//
-//    }
-
     private fun getTmpFileUri(): Uri {
         val tmpFile = File.createTempFile("tmp_image_file", ".png", cacheDir).apply {
             createNewFile()
             deleteOnExit()
         }
         return FileProvider.getUriForFile(applicationContext, "${BuildConfig.APPLICATION_ID}.provider", tmpFile)
+
 
     }
     private fun updateDisplayView(mediaType: MediaType) {
@@ -295,21 +287,17 @@ class LandmarkDetectionActivity : AppCompatActivity() {
 
             shareLandmark.setOnClickListener()
             {
-
-
-
                 //val bitmapOfDetectedImage = imageViewResult?.getDrawable()
                 val bitmapOfDetectedImage = (imageViewResult!!.getDrawable() as BitmapDrawable).getBitmap()
-//                val bitmap: Bitmap = BitmapFactory.decodeResource(
-//                    this.resources,
-//                    R.drawable.africa_landmark_detection_logo
-//                ).copy(Bitmap.Config.ARGB_8888, true)
-
+                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+                val fileName: String= landmarkDescription.text.toString().plus(LocalDateTime.now().format(formatter))
+                Log.d("FILENAME", fileName)
                 try {
+
                     val cachePath: File = File(this.cacheDir, "images")
                     cachePath.mkdirs() // make the directory
                     val stream = FileOutputStream(
-                        File(cachePath,landmarkDescription.text.toString()+".png")
+                        File(cachePath, "$fileName.png")
                     ) // overwrites this image every time
                     bitmapOfDetectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream   )
                     stream.close()
@@ -318,23 +306,39 @@ class LandmarkDetectionActivity : AppCompatActivity() {
                     e.printStackTrace()
                 }
 
+
                 val imagePath: File = File(this.cacheDir, "images")
-                val newFile = File(imagePath, landmarkDescription.text.toString()+".png")
+                val newFile = File(imagePath, "$fileName.png")
                 val contentUri = FileProvider.getUriForFile(this, "com.tensorflow.landmarker.provider", newFile)
+
+
 
                 val shareIntent = Intent()
                 shareIntent.action = Intent.ACTION_SEND
-                shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                //shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                this.grantUriPermission("android", contentUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
                 shareIntent.setDataAndType(contentUri, contentResolver.getType(contentUri))
-                //shareIntent.putExtra(Intent.EXTRA_TEXT, landmarkDescription.text)
-                shareIntent.putExtra(Intent.EXTRA_TITLE,landmarkDescription.text)
-                shareIntent.putExtra(Intent.EXTRA_TITLE,landmarkDescription.text)
-
-
+                shareIntent.putExtra(Intent.EXTRA_TITLE,landmarkDescription.text.toString())
                 shareIntent.type = "image/*"
                 shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri)
-                startActivity(Intent.createChooser(shareIntent, "Share text..."))
-
+                startActivity(Intent.createChooser(shareIntent, "Share image"))
+//
+//                val progressView: View = layoutInflater.inflate(R.layout.progress_bar_layout,null)
+//
+//                val dialogBuilder = AlertDialog.Builder(this)
+//                dialogBuilder.setView(progressView)
+//                val dialog = dialogBuilder.create()
+//                val loadingText: TextView= progressView.findViewById(R.id.loading_message)
+//                loadingText.text = "Loading.."
+//
+//                dialog.show()
+//
+//                Handler(Looper.getMainLooper()).postDelayed({
+//                    //startActivity(Intent.createChooser(shareIntent, "Share text..."))
+//                    dialog.dismiss()
+//
+//            },7000)
             }
 
 

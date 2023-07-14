@@ -66,6 +66,7 @@
                     android:backgroundTint="#E6B608"
                     android:padding="5dp"
                     android:layout_margin="3dp"
+                    android:textAllCaps="false"
                     android:text="Select From Your Device"/>
 
                 <Button
@@ -78,6 +79,8 @@
                     android:backgroundTint="#E6B608"
                     android:padding="5dp"
                     android:layout_margin="3dp"
+                    android:textAllCaps="false"
+
                     android:text="Select From Your Camera"/>
 
                 <Button
@@ -87,11 +90,13 @@
                     android:layout_weight="0.8"
                     android:elevation="10dp"
                     android:textColor="#FFFFFF"
-                    android:backgroundTint="#E6B608"
+                    android:backgroundTint="#7FCBF4"
                     android:enabled="false"
                     android:padding="5dp"
                     android:layout_margin="3dp"
-                    android:text="share"
+                    android:textAllCaps="false"
+
+                    android:text="Share"
                      />
             </LinearLayout>
 

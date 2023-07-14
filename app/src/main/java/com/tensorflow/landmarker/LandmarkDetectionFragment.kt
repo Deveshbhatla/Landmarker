@@ -8,40 +8,49 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
+import com.tensorflow.landmarker.databinding.FragmentLandmarkDetectionBinding
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.TimeUnit
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [LandmarkDetectionFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class LandmarkDetectionFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    companion object {
+        private const val TAG = "Image Classifier"
+    }
+    private var _fragmentLandmarkDetectionBinding: FragmentLandmarkDetectionBinding? = null
+    private val fragmentLandmarkDetectionBinding
+        get() = _fragmentLandmarkDetectionBinding!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    override fun onResume() {
+        super.onResume()
+
+        if (!PermissionsFragment.hasPermissions(requireContext())) {
+            Navigation.findNavController(
+                requireActivity(), R.id.fragment_container
+            ).navigate(LandmarkDetectionFragmentDirections.actionLandmarkToPermissions())
         }
+    }
+    override fun onDestroyView() {
+        _fragmentLandmarkDetectionBinding = null
+        super.onDestroyView()
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        val view: View = inflater.inflate(R.layout.fragment_landmark_detection, container, false)
-        //  view.findViewById<Button>(R.id.button1).setOnClickListener()
+    ): View {
+        _fragmentLandmarkDetectionBinding =
+            FragmentLandmarkDetectionBinding.inflate(inflater, container, false)
 
+        return fragmentLandmarkDetectionBinding.root
+    }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         //Classifications
-        val landmarkClassificationNorthAmericaCardviewButton = view.findViewById<CardView>(R.id.LandmarkDetectionNorthAmericaCardview);
+        val landmarkClassificationNorthAmericaCardviewButton = fragmentLandmarkDetectionBinding.LandmarkDetectionNorthAmericaCardview
         landmarkClassificationNorthAmericaCardviewButton.setOnClickListener()
         {
             Log.d("landmarkClassificationNorthAmericaCardviewButton: ", "Selected")
@@ -56,7 +65,7 @@ class LandmarkDetectionFragment : Fragment() {
 
         }
 
-        val landmarkClassificationSouthAmericaCardviewButton = view.findViewById<CardView>(R.id.LandmarkDetectionSouthAmericaCardview);
+        val landmarkClassificationSouthAmericaCardviewButton = fragmentLandmarkDetectionBinding.LandmarkDetectionSouthAmericaCardview
         landmarkClassificationSouthAmericaCardviewButton.setOnClickListener()
         {
             Log.d("landmarkClassificationSouthAmericaCardviewButton: ", "Selected")
@@ -69,7 +78,7 @@ class LandmarkDetectionFragment : Fragment() {
 
         }
 
-        val landmarkClassificationAsiaCardviewButton = view.findViewById<CardView>(R.id.LandmarkDetectionAsiaCardview);
+        val landmarkClassificationAsiaCardviewButton = fragmentLandmarkDetectionBinding.LandmarkDetectionAsiaCardview
         landmarkClassificationAsiaCardviewButton.setOnClickListener()
         {
             Log.d("landmarkClassificationAsiaCardviewButton: ", "Selected")
@@ -83,7 +92,7 @@ class LandmarkDetectionFragment : Fragment() {
 
 
 
-        val landmarkClassificationEuropeCardviewButton = view.findViewById<CardView>(R.id.LandmarkDetectionEuropeCardview);
+        val landmarkClassificationEuropeCardviewButton = fragmentLandmarkDetectionBinding.LandmarkDetectionEuropeCardview
         landmarkClassificationEuropeCardviewButton.setOnClickListener()
         {
             Log.d("object Detection cardview: ", "Selected")
@@ -96,7 +105,7 @@ class LandmarkDetectionFragment : Fragment() {
 
         }
 
-        val landmarkClassificationAfricaCardviewButton = view.findViewById<CardView>(R.id.LandmarkDetectionAfricaCardview);
+        val landmarkClassificationAfricaCardviewButton = fragmentLandmarkDetectionBinding.LandmarkDetectionAfricaCardview
         landmarkClassificationAfricaCardviewButton.setOnClickListener()
         {
             Log.d("object Detection cardview: ", "Selected")
@@ -108,7 +117,7 @@ class LandmarkDetectionFragment : Fragment() {
 
         }
 
-        val landmarkClassificationAntarticaCardviewButton = view.findViewById<CardView>(R.id.LandmarkDetectionAntarticaCardview);
+        val landmarkClassificationAntarticaCardviewButton = fragmentLandmarkDetectionBinding.LandmarkDetectionAntarticaCardview
         landmarkClassificationAntarticaCardviewButton.setOnClickListener()
         {
             Log.d("landmarkClassificationAntarticaCardviewButton: ", "Selected")
@@ -119,26 +128,7 @@ class LandmarkDetectionFragment : Fragment() {
             startActivity(intent)
 
         }
-        return view
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment LandmarkDetection.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            LandmarkDetectionFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
+
 }

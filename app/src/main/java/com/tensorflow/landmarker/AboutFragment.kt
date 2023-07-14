@@ -12,39 +12,23 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import com.tensorflow.landmarker.databinding.FragmentAboutBinding
 
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [AboutFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class AboutFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
+    private var _fragmentAboutBinding: FragmentAboutBinding? = null
+    private val fragmentAboutBinding
+        get() = _fragmentAboutBinding!!
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        val view: View = inflater.inflate(R.layout.fragment_about, container, false)
+    ): View {
+        _fragmentAboutBinding =
+            FragmentAboutBinding.inflate(inflater, container, false)
 
-        val cardviewButtonEmail=view.findViewById<CardView>(R.id.cardview_button_contact_me)
+        val cardviewButtonEmail=fragmentAboutBinding.cardviewButtonContactMe
         cardviewButtonEmail.setOnClickListener()
         {
             val intent = Intent(Intent.ACTION_VIEW)
@@ -55,7 +39,7 @@ class AboutFragment : Fragment() {
         }
 
 
-        val cardviewButtonWebsite=view.findViewById<CardView>(R.id.cardview_button_website)
+        val cardviewButtonWebsite=fragmentAboutBinding.cardviewButtonWebsite
         cardviewButtonWebsite.setOnClickListener()
         {
             val uri = Uri.parse("http://www.deveshbhatla.com")
@@ -72,7 +56,7 @@ class AboutFragment : Fragment() {
         val closePopup :Button=rootView.findViewById(R.id.button_dismiss_PopUp)
 
 
-        val cardviewButtonPrivacyPolicy=view.findViewById<CardView>(R.id.cardview_button_privacy_policy)
+        val cardviewButtonPrivacyPolicy=fragmentAboutBinding.cardviewButtonPrivacyPolicy
         cardviewButtonPrivacyPolicy.setOnClickListener()
         {
             dialog.setTitle("Privacy Policy")
@@ -86,7 +70,7 @@ class AboutFragment : Fragment() {
             }
         }
 
-        val cardviewButtonTermsAndConditions=view.findViewById<CardView>(R.id.cardview_button_terms_and_conditions)
+        val cardviewButtonTermsAndConditions=fragmentAboutBinding.cardviewButtonTermsAndConditions
         cardviewButtonTermsAndConditions.setOnClickListener()
         {
             dialog.setTitle("Terms and Conditions")
@@ -100,7 +84,7 @@ class AboutFragment : Fragment() {
             }
         }
 
-        val cardviewButtonLicense=view.findViewById<CardView>(R.id.cardview_button_license)
+        val cardviewButtonLicense=fragmentAboutBinding.cardviewButtonLicense
         cardviewButtonLicense.setOnClickListener()
         {
             dialog.setTitle("Apache License 2.0\n")
@@ -114,28 +98,14 @@ class AboutFragment : Fragment() {
             }
 
         }
+        return fragmentAboutBinding.root
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
 
-        return view
+
+
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment About.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AboutFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
 }

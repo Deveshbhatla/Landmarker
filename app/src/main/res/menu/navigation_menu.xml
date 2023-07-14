@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- item ids should match the nav_graph fragment ids. Like about_fragment
+    should also be present in the nav_graph.xml file
+    -->
+
     <item
-        android:id="@+id/landmarkDetection"
+        android:id="@+id/landmark_fragment"
         android:icon="@drawable/sharp_travel_explore_24"
         android:title="@string/landmarks"  />
     <item
-        android:id="@+id/aboutInfo"
+        android:id="@+id/about_fragment"
         android:icon="@drawable/outline_info_24"
         android:title="@string/about" />
 </menu>
