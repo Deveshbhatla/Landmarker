@@ -1,7 +1,6 @@
 package com.tensorflow.landmarker
 
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -10,7 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import androidx.cardview.widget.CardView
+import androidx.core.text.HtmlCompat
+import androidx.core.text.HtmlCompat.FROM_HTML_MODE_LEGACY
 import androidx.fragment.app.Fragment
 import com.tensorflow.landmarker.databinding.FragmentAboutBinding
 
@@ -60,7 +60,9 @@ class AboutFragment : Fragment() {
         cardviewButtonPrivacyPolicy.setOnClickListener()
         {
             dialog.setTitle("Privacy Policy")
-            popupTextBox.text = resources.getString( R.string.privacyPolicy )
+            val privacyText=HtmlCompat.fromHtml((getString(R.string.privacyPolicy)),
+                FROM_HTML_MODE_LEGACY)
+            popupTextBox.text = privacyText
 
             dialog.show()
 
@@ -74,7 +76,9 @@ class AboutFragment : Fragment() {
         cardviewButtonTermsAndConditions.setOnClickListener()
         {
             dialog.setTitle("Terms and Conditions")
-            popupTextBox.text = resources.getString( R.string.termsAndConditions)
+            val termsText=HtmlCompat.fromHtml((getString(R.string.termsAndConditions)),
+                FROM_HTML_MODE_LEGACY)
+            popupTextBox.text = termsText
 
             dialog.show()
 
@@ -88,7 +92,10 @@ class AboutFragment : Fragment() {
         cardviewButtonLicense.setOnClickListener()
         {
             dialog.setTitle("Apache License 2.0\n")
-            popupTextBox.text = resources.getString( R.string.license)
+            val licenseText =
+                HtmlCompat.fromHtml(getString(R.string.license), FROM_HTML_MODE_LEGACY)
+
+            popupTextBox.text = licenseText//resources.getString( R.string.license)
 
             dialog.show()
 

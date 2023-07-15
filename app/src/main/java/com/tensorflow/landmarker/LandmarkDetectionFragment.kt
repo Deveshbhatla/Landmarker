@@ -6,17 +6,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.tensorflow.landmarker.databinding.FragmentLandmarkDetectionBinding
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.TimeUnit
 
 class LandmarkDetectionFragment : Fragment() {
-    companion object {
-        private const val TAG = "Image Classifier"
-    }
+
     private var _fragmentLandmarkDetectionBinding: FragmentLandmarkDetectionBinding? = null
     private val fragmentLandmarkDetectionBinding
         get() = _fragmentLandmarkDetectionBinding!!
@@ -60,8 +55,6 @@ class LandmarkDetectionFragment : Fragment() {
             intent.putExtras(b) //Put your id to your next Intent
             startActivity(intent)
 
-            //val intent = Intent (getActivity(), NorthAmericaLandmarkClassificationActivity::class.java)
-            //startActivity(intent)
 
         }
 
@@ -89,7 +82,6 @@ class LandmarkDetectionFragment : Fragment() {
             startActivity(intent)
 
         }
-
 
 
         val landmarkClassificationEuropeCardviewButton = fragmentLandmarkDetectionBinding.LandmarkDetectionEuropeCardview

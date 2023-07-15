@@ -5,7 +5,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.graphics.drawable.BitmapDrawable
-import android.icu.util.LocaleData
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -14,13 +13,10 @@ import android.os.Looper
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
-import android.view.View.inflate
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.FileProvider
-import com.google.common.net.MediaType
 import com.google.mediapipe.framework.image.BitmapImageBuilder
 import com.google.mediapipe.tasks.core.BaseOptions
 import com.google.mediapipe.tasks.core.Delegate
@@ -30,11 +26,8 @@ import com.google.mediapipe.tasks.vision.imageclassifier.ImageClassifierResult
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import java.sql.Time
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.concurrent.Executors
@@ -99,9 +92,6 @@ class LandmarkDetectionActivity : AppCompatActivity() {
         val gallerySelectbutton = findViewById<Button>(R.id.button_select_image_gallery);
 
 
-
-
-
         gallerySelectbutton.setOnClickListener{
             getContent.launch(arrayOf("image/*"))
             updateDisplayView(MediaType.UNKNOWN)
@@ -110,65 +100,49 @@ class LandmarkDetectionActivity : AppCompatActivity() {
         }
 
         cameraSelectButton.setOnClickListener{
-
             getTmpFileUri().let { uri ->
                 tmpUri = uri
                 getContentCamera.launch(uri)
             }
-
             updateDisplayView(MediaType.UNKNOWN)
             Log.d("CAMERA BUTTON",": SELECTED")
 
         }
-
 
         val b = intent.extras
         if (b != null)
         {
             if (b.getInt("NorthAmerica")==1)
             {
-                //continentName.setText("North America Continent ")
                 modelName = "north_america_landmark.tflite"
                 supportActionBar!!.title = "North  America Continent";
-
-                //landmarkDetectorService(modelName)
             }
             else if(b.getInt("SouthAmerica")==2)
             {
                 modelName = "south_america_landmark.tflite"
                 supportActionBar!!.title ="South America Continent"
-                //landmarkDetectorService(modelName)
             }
             else if(b.getInt("Asia")==3)
             {
                 modelName = "asia_landmark.tflite"
                 supportActionBar!!.title ="Asia Continent"
-                //landmarkDetectorService(modelName)
             }
             else if(b.getInt("Europe")==4)
             {
                 modelName = "europe_landmark.tflite"
                 supportActionBar!!.title ="Europe Continent"
-
-                //landmarkDetectorService(modelName)
             }
             else if(b.getInt("Africa")==5)
             {
                 modelName = "africa_landmark.tflite"
                 supportActionBar!!.title ="Africa Continent"
-
-                //landmarkDetectorService(modelName)
             }
             else if(b.getInt("Antarctica")==6)
             {
                 modelName = "antarctica_landmark.tflite"
                 supportActionBar!!.title ="Antartica Continent"
-
-                //landmarkDetectorService(modelName)
             }
-
         }
-
 
     }
     private fun loadMediaType(uri: Uri): MediaType {
@@ -176,13 +150,11 @@ class LandmarkDetectionActivity : AppCompatActivity() {
         mimeType?.let {
             if (mimeType.startsWith("image")) return MediaType.IMAGE
         }
-
         return MediaType.UNKNOWN
     }
     private fun landmarkDetectorService(modelName:String,uri: Uri)
     {
         backgroundExecutor = Executors.newSingleThreadScheduledExecutor()
-
         updateDisplayView(MediaType.IMAGE)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -210,7 +182,7 @@ class LandmarkDetectionActivity : AppCompatActivity() {
                 val optionsBuilder =
                     ImageClassifier.ImageClassifierOptions.builder()
 
-                        .setScoreThreshold(0.5F)
+                        .setScoreThreshold(0.6F)
                         .setRunningMode(RunningMode.IMAGE)
                         .setMaxResults(3)
                         .setBaseOptions(
@@ -238,14 +210,10 @@ class LandmarkDetectionActivity : AppCompatActivity() {
                 val classifierResult = imageClassifier!!.classify(mpImage)
                 Log.d("ClassifierResult",classifierResult.toString())
                 updateResults(classifierResult)
-
                     dialog.dismiss();
-
-
 
             }, 5000)
         }
-
     }
     private fun getTmpFileUri(): Uri {
         val tmpFile = File.createTempFile("tmp_image_file", ".png", cacheDir).apply {
@@ -306,12 +274,9 @@ class LandmarkDetectionActivity : AppCompatActivity() {
                     e.printStackTrace()
                 }
 
-
                 val imagePath: File = File(this.cacheDir, "images")
                 val newFile = File(imagePath, "$fileName.png")
                 val contentUri = FileProvider.getUriForFile(this, "com.tensorflow.landmarker.provider", newFile)
-
-
 
                 val shareIntent = Intent()
                 shareIntent.action = Intent.ACTION_SEND
@@ -323,30 +288,11 @@ class LandmarkDetectionActivity : AppCompatActivity() {
                 shareIntent.type = "image/*"
                 shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri)
                 startActivity(Intent.createChooser(shareIntent, "Share image"))
-//
-//                val progressView: View = layoutInflater.inflate(R.layout.progress_bar_layout,null)
-//
-//                val dialogBuilder = AlertDialog.Builder(this)
-//                dialogBuilder.setView(progressView)
-//                val dialog = dialogBuilder.create()
-//                val loadingText: TextView= progressView.findViewById(R.id.loading_message)
-//                loadingText.text = "Loading.."
-//
-//                dialog.show()
-//
-//                Handler(Looper.getMainLooper()).postDelayed({
-//                    //startActivity(Intent.createChooser(shareIntent, "Share text..."))
-//                    dialog.dismiss()
-//
-//            },7000)
             }
-
-
         }
     }
     override fun onBackPressed() {
-        val intent = Intent (this, MainActivity::class.java)
-        startActivity(intent)
+finishAndRemoveTask()
     }
 
 }
