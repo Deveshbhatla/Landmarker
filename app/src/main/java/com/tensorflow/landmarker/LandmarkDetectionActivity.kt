@@ -47,7 +47,7 @@ class LandmarkDetectionActivity : AppCompatActivity() {
     }
     private val getContent =
         registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
-            // Handle the returned Uri
+            // Handle the returned Document Uri
             uri?.let { mediaUri ->
                 when (val mediaType = loadMediaType(mediaUri)) {
                     MediaType.IMAGE -> landmarkDetectorService(modelName,mediaUri)
@@ -65,7 +65,7 @@ class LandmarkDetectionActivity : AppCompatActivity() {
 
     private val getContentCamera =
         registerForActivityResult(ActivityResultContracts.TakePicture()) { isSuccess: Boolean ->
-            // Handle the returned Uri
+            // Handle the returned Camera Uri
             if(isSuccess)
             {
                 tmpUri?.let { mediaUri ->
@@ -231,6 +231,8 @@ class LandmarkDetectionActivity : AppCompatActivity() {
         imageViewResult?.visibility ?:
             if (mediaType == MediaType.UNKNOWN) View.VISIBLE else View.GONE
     }
+
+    //Updates the Edit Text, and provides features for sharing the image file
     private fun updateResults(imageClassifierResult: ImageClassifierResult? = null) {
         val landmarkDescription=findViewById<EditText>(R.id.Landmark_Description)
         val shareLandmark=findViewById<Button>(R.id.button_share_landmark)
@@ -255,8 +257,7 @@ class LandmarkDetectionActivity : AppCompatActivity() {
 
             shareLandmark.setOnClickListener()
             {
-                //val bitmapOfDetectedImage = imageViewResult?.getDrawable()
-                val bitmapOfDetectedImage = (imageViewResult!!.getDrawable() as BitmapDrawable).getBitmap()
+                val bitmapOfDetectedImage = (imageViewResult!!.drawable as BitmapDrawable).bitmap
                 val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
                 val fileName: String= landmarkDescription.text.toString().plus(LocalDateTime.now().format(formatter))
                 Log.d("FILENAME", fileName)
@@ -274,13 +275,12 @@ class LandmarkDetectionActivity : AppCompatActivity() {
                     e.printStackTrace()
                 }
 
-                val imagePath: File = File(this.cacheDir, "images")
+                val imagePath = File(this.cacheDir, "images")
                 val newFile = File(imagePath, "$fileName.png")
                 val contentUri = FileProvider.getUriForFile(this, "com.tensorflow.landmarker.provider", newFile)
 
                 val shareIntent = Intent()
                 shareIntent.action = Intent.ACTION_SEND
-                //shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 this.grantUriPermission("android", contentUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
                 shareIntent.setDataAndType(contentUri, contentResolver.getType(contentUri))

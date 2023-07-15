@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -14,17 +15,7 @@ import androidx.navigation.Navigation
 val PERMISSIONS_REQUIRED = arrayOf(Manifest.permission.CAMERA,Manifest.permission.READ_EXTERNAL_STORAGE)
 
 class PermissionsFragment : Fragment() {
-//    private val requestPermissionLauncher =
-//        registerForActivityResult(
-//            ActivityResultContracts.RequestPermission()
-//        ) { isGranted: Boolean ->
-//            if (isGranted) {
-//                Toast.makeText(context, "Permission request granted", Toast.LENGTH_LONG).show()
-//                navigateToLandmark()
-//            } else {
-//                Toast.makeText(context, "Permission request denied", Toast.LENGTH_LONG).show()
-//            }
-//        }
+
     private val requestMultiplePermissions = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions())
 {
@@ -32,6 +23,15 @@ class PermissionsFragment : Fragment() {
     permissions.entries.forEach {
         Log.d("DEBUG", "${it.key} = ${it.value}")
     }
+//    //if permissions are granted then navigate to the landmark fragment
+//    val granted = permissions.entries.all {
+//        it.value// same as it.value == true
+//    }
+//    if (granted) {
+//        navigateToLandmark()
+//    }
+//    else
+//        Toast.makeText(context,"Permissions denied",Toast.LENGTH_LONG).show()
 }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,6 +47,8 @@ class PermissionsFragment : Fragment() {
             }
         }
     }
+
+    /** Method to navigate to the LandmarkDetectionFragment */
     private fun navigateToLandmark() {
         lifecycleScope.launchWhenStarted {
             Navigation.findNavController(requireActivity(), R.id.fragment_container).navigate(
