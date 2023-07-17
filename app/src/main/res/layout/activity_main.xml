@@ -34,9 +34,6 @@
         android:layout_height="55dp"
         android:layout_alignParentBottom="true"
         app:menu="@menu/navigation_menu"
-        android:background="#ffffff"
-        app:itemIconTint="@color/navbar_color"
-        app:itemTextColor="@color/navbar_color"
         />
     <View
         android:id="@+id/view"

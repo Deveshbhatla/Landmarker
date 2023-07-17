@@ -93,7 +93,6 @@
                             android:layout_marginBottom="5dp"
                             android:text="North America"
                             android:textAlignment="center"
-                            android:textColor="@android:color/black"
                             android:textSize="16sp" />
 
                     </LinearLayout>
@@ -137,7 +136,6 @@
                             android:layout_marginBottom="5dp"
                             android:text="South America "
                             android:textAlignment="center"
-                            android:textColor="@android:color/black"
                             android:textSize="16sp" />
 
                     </LinearLayout>
@@ -181,7 +179,6 @@
                             android:layout_marginBottom="5dp"
                             android:text="Asia "
                             android:textAlignment="center"
-                            android:textColor="@android:color/black"
                             android:textSize="16sp" />
 
                     </LinearLayout>
@@ -225,7 +222,6 @@
                             android:layout_marginBottom="5dp"
                             android:text="Europe"
                             android:textAlignment="center"
-                            android:textColor="@android:color/black"
                             android:textSize="16sp" />
 
                     </LinearLayout>
@@ -269,7 +265,6 @@
                             android:layout_marginBottom="5dp"
                             android:text="Africa"
                             android:textAlignment="center"
-                            android:textColor="@android:color/black"
                             android:textSize="16sp" />
 
                     </LinearLayout>
@@ -313,7 +308,6 @@
                             android:layout_marginBottom="5dp"
                             android:text=" Antartica"
                             android:textAlignment="center"
-                            android:textColor="@android:color/black"
                             android:textSize="16sp" />
 
                     </LinearLayout>

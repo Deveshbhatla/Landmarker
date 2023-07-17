@@ -35,7 +35,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/please_select_an_image"
-                android:backgroundTint="@color/teal_200"
+                android:backgroundTint="#90FFF4"
+                android:background="@null"
+                android:padding="3dp"
                 android:inputType="text">
             </EditText>
 
@@ -60,37 +62,37 @@
                     android:id="@+id/button_select_image_gallery"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="2"
+                    android:layout_weight="3"
                     android:elevation="10dp"
-                    android:textColor="#FFFFFF"
-                    android:backgroundTint="#E6B608"
+                    android:textColor="#000000"
+                    android:backgroundTint="#C3C3C2"
                     android:padding="5dp"
                     android:layout_margin="3dp"
                     android:textAllCaps="false"
-                    android:text="Select From Your Device"/>
+                    android:text="Gallery"/>
 
                 <Button
                     android:id="@+id/button_select_image_camera"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="2"
+                    android:layout_weight="3"
                     android:elevation="10dp"
-                    android:textColor="#FFFFFF"
-                    android:backgroundTint="#E6B608"
+                    android:textColor="#000000"
+                    android:backgroundTint="#C3C3C2"
                     android:padding="5dp"
                     android:layout_margin="3dp"
                     android:textAllCaps="false"
 
-                    android:text="Select From Your Camera"/>
+                    android:text=" Camera"/>
 
                 <Button
                     android:id="@+id/button_share_landmark"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.8"
+                    android:layout_weight="0.01"
                     android:elevation="10dp"
-                    android:textColor="#FFFFFF"
-                    android:backgroundTint="#7FCBF4"
+                    android:textColor="#000000"
+                    android:backgroundTint="#A3EFE8"
                     android:enabled="false"
                     android:padding="5dp"
                     android:layout_margin="3dp"

@@ -64,7 +64,6 @@
                         android:text="Contact me"
                         android:gravity="center_vertical"
                         android:layout_margin="8dp"
-                        android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:padding="10dp"/>
 
@@ -108,7 +107,6 @@
                         android:layout_height="wrap_content"
                         android:text="Website"
                         android:textAlignment="center"
-                        android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:layout_margin="8dp"
                         android:padding="10dp"/>
@@ -153,7 +151,6 @@
                         android:layout_height="wrap_content"
                         android:text="Privacy Policy"
                         android:textAlignment="center"
-                        android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:layout_margin="8dp"
                         android:padding="8dp"/>
@@ -199,7 +196,6 @@
                         android:layout_height="wrap_content"
                         android:text="Terms and Conditions"
                         android:textAlignment="center"
-                        android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:layout_margin="5dp"
                         android:padding="10dp"/>
@@ -245,7 +241,6 @@
                         android:layout_height="wrap_content"
                         android:text="License"
                         android:textAlignment="center"
-                        android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:layout_margin="5dp"
                         android:padding="10dp"/>
@@ -271,13 +266,11 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#000000"
                 android:textAlignment="center"
                 android:text="@string/copyright"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#000000"
                 android:textAlignment="center"
                 android:layout_marginTop="10dp"
                 android:text="@string/app_version"/>
