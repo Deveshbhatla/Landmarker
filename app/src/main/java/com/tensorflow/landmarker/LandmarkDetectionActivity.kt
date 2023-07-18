@@ -1,6 +1,7 @@
 package com.tensorflow.landmarker
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
@@ -32,6 +33,8 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
+import android.content.res.AssetManager
+import java.io.InputStream
 
 
 private var imageClassifier: ImageClassifier? = null
@@ -41,6 +44,7 @@ private var tmpUri: Uri? = null
 
 class LandmarkDetectionActivity : AppCompatActivity() {
     var imageViewResult: ImageView? =null
+
 
     enum class MediaType {
         IMAGE, UNKNOWN
@@ -91,6 +95,11 @@ class LandmarkDetectionActivity : AppCompatActivity() {
         val cameraSelectButton = findViewById<Button>(R.id.button_select_image_camera)
         val gallerySelectbutton = findViewById<Button>(R.id.button_select_image_gallery);
 
+        val context: Context = createPackageContext("com.tensorflow.landmarker", 0)
+        val assetManager: AssetManager = context.assets
+        //val stream: InputStream = assetManager.open("models")
+
+Log.d("ASSETS PACK: ",assetManager.list("").toString())
 
         gallerySelectbutton.setOnClickListener{
             getContent.launch(arrayOf("image/*"))
